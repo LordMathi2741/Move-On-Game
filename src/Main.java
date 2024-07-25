@@ -10,7 +10,8 @@ public class Main {
         private  final int HEIGHT = 600;
         private  final int UNIT_SIZE = 10;
         private final int characterLength = 10;
-        private final int DELAY = 1000/UNIT_SIZE;
+        private int speed = 1000;
+        private final int DELAY = speed/UNIT_SIZE;
         private int currentScore = 0;
         private char direction = 'R';
         private boolean running = false;
@@ -21,6 +22,7 @@ public class Main {
         private int foodNegativeY;
         private int powerUpX;
         private int powerUpY;
+        private boolean showTrollMessage = false;
         private int x[] = new int[WIDTH/UNIT_SIZE];
         private int y[] = new int[HEIGHT/UNIT_SIZE];
         public Game() {
@@ -41,9 +43,18 @@ public class Main {
 
             });
             timer.start();
-            newFood();
-            newNegativeFood();
-            newPowerUp();
+            Timer foodTimer = new Timer(5000, e -> {
+                newFood();
+            });
+            Timer negativeFoodTimer = new Timer(2000, e -> {
+                newNegativeFood();
+            });
+            Timer powerUpTimer = new Timer(10000, e -> {
+                newPowerUp();
+            });
+            foodTimer.start();
+            negativeFoodTimer.start();
+            powerUpTimer.start();
         }
 
         public void paintComponent(Graphics g) {
@@ -60,6 +71,9 @@ public class Main {
                 g.fillRect(foodNegativeX, foodNegativeY, UNIT_SIZE, UNIT_SIZE);
                 g.setColor(Color.YELLOW);
                 g.fillRect(powerUpX, powerUpY, UNIT_SIZE, UNIT_SIZE);
+                if(showTrollMessage){
+                    showTrollMessageAlert(g);
+                }
             }else {
                 gameOver(g);
             }
@@ -131,11 +145,21 @@ public class Main {
             }
             if(x[0] == powerUpX && y[0] == powerUpY){
                 currentScore += 5;
+                speed = 200;
                 newPowerUp();
+            }
+            if(x[0] == powerUpX - 30 && y[0] == powerUpY -30){
+                setRandomPosition();
+                showTrollMessage = true;
             }
             if(currentScore < 0){
                 running = false;
             }
+        }
+
+        public void setRandomPosition(){
+            x[0] = (int) (Math.random() * ((double) WIDTH / UNIT_SIZE)) * UNIT_SIZE;
+            y[0] = (int) (Math.random() * ((double) HEIGHT / UNIT_SIZE)) * UNIT_SIZE;
         }
 
         public void showScore(Graphics g){
@@ -143,6 +167,18 @@ public class Main {
             g.setFont(new Font("Ink Free", Font.BOLD, 20));
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString("Score: "+currentScore, 0, g.getFont().getSize());
+
+        }
+
+        public void showTrollMessageAlert(Graphics g){
+            g.setColor(Color.RED);
+            g.setFont(new Font("Ink Free", Font.BOLD, 20));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            g.drawString("You have been trolled", 300, g.getFont().getSize());
+            Timer timer = new Timer(2000, e -> {
+                showTrollMessage = false;
+            });
+            timer.start();
         }
 
         public void newFood(){
