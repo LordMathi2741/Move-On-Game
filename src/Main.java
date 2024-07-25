@@ -43,18 +43,7 @@ public class Main {
 
             });
             timer.start();
-            Timer foodTimer = new Timer(5000, e -> {
-                newFood();
-            });
-            Timer negativeFoodTimer = new Timer(2000, e -> {
-                newNegativeFood();
-            });
-            Timer powerUpTimer = new Timer(10000, e -> {
-                newPowerUp();
-            });
-            foodTimer.start();
-            negativeFoodTimer.start();
-            powerUpTimer.start();
+            setTimers();
         }
 
         public void paintComponent(Graphics g) {
@@ -183,6 +172,21 @@ public class Main {
                 showTrollMessage = false;
             });
             timer.start();
+        }
+
+        public void setTimers(){
+            Timer foodTimer = new Timer(5000, e -> {
+                newFood();
+            });
+            Timer negativeFoodTimer = new Timer(2000, e -> {
+                newNegativeFood();
+            });
+            Timer powerUpTimer = new Timer(10000, e -> {
+                newPowerUp();
+            });
+            foodTimer.start();
+            negativeFoodTimer.start();
+            powerUpTimer.start();
         }
 
         public void newFood(){
