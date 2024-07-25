@@ -1,7 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileWriter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 public class Main {
 
@@ -23,9 +25,11 @@ public class Main {
         private int powerUpX;
         private int powerUpY;
         private boolean showTrollMessage = false;
+        private boolean scoreSaved = false;
+
         private int x[] = new int[WIDTH/UNIT_SIZE];
         private int y[] = new int[HEIGHT/UNIT_SIZE];
-        public Game() {
+        public Game()  {
             setBackground(Color.BLACK);
             setPreferredSize(new Dimension(WIDTH, HEIGHT));
             setFocusable(true);
@@ -36,6 +40,7 @@ public class Main {
 
         public void startGame() {
             running = true;
+            scoreSaved = false;
             timer = new Timer(DELAY, e -> {
                 move();
                 repaint();
@@ -57,6 +62,10 @@ public class Main {
                 }
             }else {
                 gameOver(g);
+                if(!scoreSaved) {
+                    saveScore();
+                    scoreSaved = true;
+                }
             }
         }
 
@@ -213,6 +222,16 @@ public class Main {
             g.setFont(new Font("Ink Free", Font.BOLD, 75));
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over"))/2, HEIGHT/2);
+        }
+
+        public void saveScore(){
+            try {
+                FileWriter scoreFile = new FileWriter("scores.txt",true);
+                scoreFile.write("Score: "+ currentScore + "\n");
+                scoreFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
