@@ -50,10 +50,7 @@ public class Main {
             super.paintComponent(g);
             showScore(g);
             if (running) {
-                for (int i = 0; i < characterLength; i++) {
-                    g.setColor(Color.GREEN);
-                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-                }
+                drawSnake(g);
                 drawFoods(g);
                 if(showTrollMessage){
                     showTrollMessageAlert(g);
@@ -187,6 +184,13 @@ public class Main {
             foodTimer.start();
             negativeFoodTimer.start();
             powerUpTimer.start();
+        }
+
+        public void drawSnake(Graphics g){
+            for (int i = 0; i < characterLength; i++) {
+                g.setColor(Color.GREEN);
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
         }
 
         public void newFood(){
