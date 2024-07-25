@@ -65,12 +65,7 @@ public class Main {
                     g.setColor(Color.GREEN);
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
-                g.setColor(Color.RED);
-                g.fillRect(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
-                g.setColor(Color.BLUE);
-                g.fillRect(foodNegativeX, foodNegativeY, UNIT_SIZE, UNIT_SIZE);
-                g.setColor(Color.YELLOW);
-                g.fillRect(powerUpX, powerUpY, UNIT_SIZE, UNIT_SIZE);
+                drawFoods(g);
                 if(showTrollMessage){
                     showTrollMessageAlert(g);
                 }
@@ -155,6 +150,15 @@ public class Main {
             if(currentScore < 0){
                 running = false;
             }
+        }
+
+        public void drawFoods(Graphics g){
+            g.setColor(Color.RED);
+            g.fillRect(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
+            g.setColor(Color.BLUE);
+            g.fillRect(foodNegativeX, foodNegativeY, UNIT_SIZE, UNIT_SIZE);
+            g.setColor(Color.YELLOW);
+            g.fillRect(powerUpX, powerUpY, UNIT_SIZE, UNIT_SIZE);
         }
 
         public void setRandomPosition(){
