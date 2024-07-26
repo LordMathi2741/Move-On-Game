@@ -26,6 +26,7 @@ public class Main {
         private int powerUpY;
         private boolean showTrollMessage = false;
         private boolean scoreSaved = false;
+        private boolean winner = false;
 
         private int x[] = new int[WIDTH/UNIT_SIZE];
         private int y[] = new int[HEIGHT/UNIT_SIZE];
@@ -45,6 +46,7 @@ public class Main {
                 move();
                 repaint();
                 checkCollision();
+                checkWinner();
 
             });
             timer.start();
@@ -54,13 +56,19 @@ public class Main {
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             showScore(g);
-            if (running) {
+            if (running && !winner) {
                 drawSnake(g);
                 drawFoods(g);
                 if(showTrollMessage){
                     showTrollMessageAlert(g);
                 }
-            }else {
+            } else if (!running && winner) {
+                winnerBanner(g);
+                if(!scoreSaved) {
+                    saveScore();
+                    scoreSaved = true;
+                }
+            } else {
                 gameOver(g);
                 if(!scoreSaved) {
                     saveScore();
@@ -147,6 +155,13 @@ public class Main {
             }
         }
 
+        public void checkWinner(){
+            if(currentScore >= 30){
+                winner = true;
+                running = false;
+            }
+        }
+
         public void drawFoods(Graphics g){
             g.setColor(Color.RED);
             g.fillRect(foodX, foodY, UNIT_SIZE, UNIT_SIZE);
@@ -222,6 +237,13 @@ public class Main {
             g.setFont(new Font("Ink Free", Font.BOLD, 75));
             FontMetrics metrics = getFontMetrics(g.getFont());
             g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over"))/2, HEIGHT/2);
+        }
+
+        public void winnerBanner(Graphics g){
+            g.setColor(Color.GREEN);
+            g.setFont(new Font("Ink Free", Font.BOLD, 75));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            g.drawString("You Win", (WIDTH - metrics.stringWidth("You Win"))/2, HEIGHT/2);
         }
 
         public void saveScore(){
